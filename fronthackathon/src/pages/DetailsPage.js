@@ -1,6 +1,18 @@
-import React from 'react';
+// import React, { useState } from 'react';
 
-const EditableForm = () => {
+//ajouter map indiquant localisation de l'activité
+
+const DetailsPage = () => {
+    const fakeData = {
+        name: "Randonnée au Mont Blanc",
+        description: "Découvrez les magnifiques paysages du Mont Blanc lors d'une randonnée guidée. Profitez de vues imprenables sur les sommets enneigés et explorez la faune et la flore locales.",
+        location: "Chamonix-Mont-Blanc, France",
+        distance: "12 km",
+        duration: "6 heures",
+        difficulty: "Modérée",
+        image: "https://via.placeholder.com/800x400", // Image de remplacement
+    };
+
     return (
         <div className="container mt-5">
             <div className="card bg-light shadow-sm">
@@ -36,8 +48,7 @@ const EditableForm = () => {
                 </div>
             </div>
         </div>
-        
     );
-}
+};
 
-export default EditableForm;
+export default DetailsPage;

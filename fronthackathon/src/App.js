@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
+import DetailsPage from './pages/DetailsPage';
+import EditPage from './pages/EditPage';
 import './App.css';
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
                 <h1 className="text-center text-primary mb-4">Recherchez des Activités Touristiques</h1>
                 <SearchBar onSearch={handleSearch} />
                 <SearchResults results={results} onSelect={handleSelect} />
+                <DetailsPage/>
+                <EditPage/>
             </div>
         </>
     );
