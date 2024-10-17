@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Fake data
 const fakeData = [
@@ -108,6 +109,11 @@ const SearchBar = () => {
                             <p className='card-text text-primary'>
                             {result.description}
                             </p>
+                            <Link to="/details">
+                                <button className="btn btn-secondary mt-2">
+                                    Voir les détails
+                                </button>
+                            </Link>
                         </div>
 
                     </div>
