@@ -1,26 +1,24 @@
+#database.py
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 
-from models.associationModel import metadata as association_metadata
-from models.festivalModel import metadata as festival_metadata
-from models.mortaliteModel import metadata as mortalite_metadata
+from model.activityModel import metadata as activity_metadata  # Only import activity metadata
 
-DATABASE_URL = "mysql+mysqlconnector://root:@localhost:3306/hackathon_2023"
+# Update the database URL to PostgreSQL
+DATABASE_URL = "postgresql://postgres:0000@localhost:5432/tourism"
 
-# Création MySql Engine
+# Create PostgreSQL engine
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # Create tables if they don't exist
 def init_db():
-    # Create all tables defined in the metadata
-    association_metadata.create_all(bind=engine)
-    festival_metadata.create_all(bind=engine)
-    mortalite_metadata.create_all(bind=engine)
+    # Create all tables defined in the activity metadata
+    activity_metadata.create_all(bind=engine)
 
 
-# Dépendance pour la création bdd
+# Dependency to get a DB session
 def get_db():
     db = SessionLocal()
     try:

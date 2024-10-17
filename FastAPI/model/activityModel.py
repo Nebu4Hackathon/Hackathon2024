@@ -1,4 +1,4 @@
-# tourism_model.py
+# activity_model.py
 from sqlalchemy import MetaData, Table, Column, Integer, String, Text, Float
 
 metadata = MetaData()
