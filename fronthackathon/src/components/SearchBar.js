@@ -1,95 +1,51 @@
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+// Fake data
+const fakeData = [
+    { id: 1, nom: 'Balade en Canoë', type: 'randonnee', location: 'Paris' },
+    { id: 2, nom: 'Randonnée en montagne', type: 'randonnee', location: 'Grenoble' },
+    { id: 3, nom: 'Tour à vélo', type: 'velo', location: 'Lyon' },
+    { id: 4, nom: 'Canoë sur la rivière', type: 'canoe', location: 'Marseille' },
+    { id: 5, nom: 'Vélo autour du lac', type: 'velo', location: 'Annecy' }
+];
+
+const SearchBar = () => {
     const [type, setType] = useState('');
     const [location, setLocation] = useState('');
     const [radius, setRadius] = useState(10); // Valeur par défaut de 10 km
     const [keyword, setKeyword] = useState('');
-    const [showAdditionalLocation, setShowAdditionalLocation] = useState(false);
+    const [results, setResults] = useState([]); // Pour stocker les résultats filtrés
 
+    // Fonction de filtrage
     const handleSearch = () => {
-        onSearch({ type, location, radius, keyword });
-    };
-
-    const toggleAdditionalLocation = () => {
-        setShowAdditionalLocation(!showAdditionalLocation);
+        const filteredResults = fakeData.filter(item =>
+            item.nom.toLowerCase().includes(keyword.toLowerCase())  // Filtre par mot-clé dans le champ "nom"
+        );
+        setResults(filteredResults);  // Mettre à jour les résultats filtrés
     };
 
     return (
         <div className="p-3 bg-light rounded">
             <div className="form-row mb-3">
-                <div className="col row">
-
-                    {/* Interet 1  */}
-                    <div className='col-md-3'>
-                    <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
-                    <select 
-                        id="typeSelect" 
-                        className="form-control" 
-                        value={type} 
-                        onChange={(e) => setType(e.target.value)}
-                    >
-                        <option value="">Choisir...</option>
-                        <option value="randonnee">Randonnée</option>
-                        <option value="velo">Vélo</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    </div>
-                    
-                    {/* Interet 2  */}
-                    <div className='col-md-3'>
-                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
-                    <select 
-                        id="typeSelect" 
-                        className="form-control" 
-                        value={type} 
-                        onChange={(e) => setType(e.target.value)}
-                    >
-                        <option value="">Choisir...</option>
-                        <option value="randonnee">Randonnée</option>
-                        <option value="velo">Vélo</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    </div>
-
-                    {/* Interet 3  */}
-                    <div className='col-md-3'>
-                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
-                    <select 
-                        id="typeSelect" 
-                        className="form-control" 
-                        value={type} 
-                        onChange={(e) => setType(e.target.value)}
-                    >
-                        <option value="">Choisir...</option>
-                        <option value="randonnee">Randonnée</option>
-                        <option value="velo">Vélo</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    </div>
-
-                    {/* Interet 4  */}
-                    <div className='col-md-3'>
-
-                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
-                    <select 
-                        id="typeSelect" 
-                        className="form-control" 
-                        value={type} 
-                        onChange={(e) => setType(e.target.value)}
-                    >
-                        <option value="">Choisir...</option>
-                        <option value="randonnee">Randonnée</option>
-                        <option value="velo">Vélo</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    </div>
-                    
-                </div>
-                
-                <div className='row mt-3'>
-                    {/* ville 1 */}
+                <div className="col">
+                    {/* Champ de type d'intérêt */}
                     <div className="col-md-3">
+                        <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
+                        <select 
+                            id="typeSelect" 
+                            className="form-control" 
+                            value={type} 
+                            onChange={(e) => setType(e.target.value)}
+                        >
+                            <option value="">Choisir...</option>
+                            <option value="randonnee">Randonnée</option>
+                            <option value="velo">Vélo</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    {/* Champ de localisation */}
+                    <div className="col-md-3 mt-3">
                         <label htmlFor="locationInput" className="text-secondary">Localisation Exacte</label>
                         <input 
                             type="text" 
@@ -100,50 +56,69 @@ const SearchBar = ({ onSearch }) => {
                             onChange={(e) => setLocation(e.target.value)}
                         />
                     </div>
-                    {/* Autre localisation si showAdditionalLocation true */}
-                    {showAdditionalLocation && (
-                        <div className="col-md-3">
-                            <label htmlFor="additionalLocationInput" className="text-secondary">Autre localisation</label>
-                            <input 
-                                type="text" 
-                                id="additionalLocationInput" 
-                                className="form-control" 
-                                placeholder="Ville ou Adresse" 
-                                value={location} 
-                                onChange={(e) => setLocation(e.target.value)}
-                            />
-                        </div>
-                    )}
-                    <button className="btn btn-secondary btn-sm mt-2 col-md-3" onClick={toggleAdditionalLocation}>
-                        {showAdditionalLocation ? 'Masquer' : 'Afficher plus'}
-                    </button>
+
+                    <div className="col-md-3">
+                        <label htmlFor="radiusRange" className="text-tertiary">Distance Maximale (km) : {radius} km</label>
+                        <input 
+                            type="range" 
+                            id="radiusRange" 
+                            className="form-control-range" 
+                            min="1" 
+                            max="100" 
+                            step="1" 
+                            value={radius} 
+                            onChange={(e) => setRadius(e.target.value)}
+                        />
+                    </div>                 
+
+                    {/* Champ de recherche par mot-clé */}
+                    <div className="col-md-3 mt-3">
+                        <label htmlFor="keywordInput" className="text-primary">Recherche par Mot-Clé</label>
+                        <input 
+                            type="text" 
+                            id="keywordInput" 
+                            className="form-control" 
+                            placeholder="Ex: canoë" 
+                            value={keyword} 
+                            onChange={(e) => setKeyword(e.target.value)}
+                        />
+                    </div>
                 </div>
-                <div className="col-md-3 mt-3">
-                    <label htmlFor="radiusRange" className="text-tertiary">Distance Maximale (km) : {radius} km</label>
-                    <input 
-                        type="range" 
-                        id="radiusRange" 
-                        className="form-control-range" 
-                        min="1" 
-                        max="100" 
-                        step="1" 
-                        value={radius} 
-                        onChange={(e) => setRadius(e.target.value)}
-                    />
-                </div>
-                <div className="col-md-s7 mt-3">
-                    <label htmlFor="keywordInput" className="text-primary">Recherche par Mot-Clé</label>
-                    <input 
-                        type="text" 
-                        id="keywordInput" 
-                        className="form-control" 
-                        placeholder="Ex: canoë" 
-                        value={keyword} 
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
-                </div>
+
+                {/* Bouton de recherche */}
+                <button className="btn btn-primary w-15 mt-3" onClick={handleSearch}>Rechercher</button>
             </div>
-            <button className="btn btn-primary w-15" onClick={handleSearch}>Rechercher</button>
+
+            {/* Affichage des résultats */}
+            <div className="mt-3">
+            <h3>Résultats de la recherche :</h3>
+            {results.length > 0 ? (
+                // <ul>
+                //     {results.map(result => (
+                //         <li key={result.id}>{result.nom} - {result.location}</li>
+                //     ))}
+                // </ul>
+            <div>
+                {results.map(result => (
+                <div className="col-md-4 mb-3" key={result.id}>{result.nom} - {result.location}
+                <div className="card bg-dark text-white h-100">
+                    <div className="card-body">
+                        <h5 className="card-title text-primary">{result.nom}</h5>
+                        <div className='card-body'>
+                            <p className='card-text text-primary'>
+                            {result.description}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+                ))}
+                </div> 
+            ) : (
+                <p></p>
+            )}
+            </div>
         </div>
     );
 };
