@@ -1,3 +1,5 @@
+import re
+
 ENDPOINTS = [
     "1ad4899d-fab3-4abd-8df7-025004902932", # tour
     "2b52bb1f-8676-43f2-b883-f673e7015ed9",  # réunion
@@ -21,8 +23,29 @@ ENDPOINTS = [
 ]
 
 
+import re
+
+def extract_type(categories_de_poi: str) -> str:
+    """
+    Extracts the main type of activity from the categories_de_poi column.
+    Ignores '#PointOfInterest' if it appears in the categories.
+    """
+    # Find all hashtags in the categories_de_poi string
+    types = re.findall(r'#\w+', categories_de_poi)
+
+    # Filter out 'PointOfInterest' and return the first valid type
+    valid_types = [type_ for type_ in types if type_.lower() != '#pointofinterest']
+
+    # Return the first valid type (without '#'), or None if no valid types are found
+    if valid_types:
+        return valid_types[0][1:]  # Remove the leading '#' and return
+
+    return None  # Default if no valid type is found
+
+
+
 def filter_activity_data(activity_data: dict) -> dict:
-    """Filters the activity data to only include valid columns and splits postal code and commune."""
+    """Filters the activity data to only include valid columns, splits postal code/commune, and extracts type."""
 
     # Define valid columns that map to the lowercase names in the database
     VALID_COLUMNS = {
@@ -59,5 +82,11 @@ def filter_activity_data(activity_data: dict) -> dict:
     else:
         filtered_data['code_postal'] = None
         filtered_data['commune'] = None
+
+    # Extract "type" from Categories_de_POI and add it to filtered_data
+    if 'Categories_de_POI' in activity_data:
+        filtered_data['type'] = extract_type(activity_data['Categories_de_POI'])
+    else:
+        filtered_data['type'] = None
 
     return filtered_data

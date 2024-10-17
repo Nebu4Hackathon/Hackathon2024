@@ -18,7 +18,7 @@ scheduler = BackgroundScheduler()
 def startup_event():
     init_db()
     # Schedule the task to run once a month on the first day at midnight
-    scheduler.add_job(fetch_and_insert_data_task, 'cron', day=17, hour=21, minute=37)
+    scheduler.add_job(fetch_and_insert_data_task, 'cron', day=17, hour=23, minute=30)
     scheduler.start()
 
 

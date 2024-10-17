@@ -1,5 +1,5 @@
 # activity_model.py
-from sqlalchemy import MetaData, Table, Column, Integer, String, Text, Float
+from sqlalchemy import MetaData, Table, Column, Integer, String, Text, Float, DATE
 
 metadata = MetaData()
 
@@ -16,9 +16,10 @@ activity_table = Table(
     Column('commune', String(255), nullable=True),      # New column for commune
     Column('createur_de_la_donnee', String(255), nullable=True),
     Column('sit_diffuseur', String(255), nullable=True),
-    Column('date_de_mise_a_jour', String(50), nullable=True),
+    Column('date_de_mise_a_jour', DATE, nullable=True),
     Column('contacts_du_poi', Text, nullable=True),
     Column('classements_du_poi', Text, nullable=True),
     Column('description', Text, nullable=True),
     Column('uri_id_du_poi', String(255), nullable=True),
+    Column('type', String(255), nullable=True)
 )
