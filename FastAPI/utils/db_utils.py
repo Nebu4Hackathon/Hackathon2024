@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 # General function to insert data into a database table
-def insert_data_in_batches(db: Session, table, data: list, batch_size: int = 10000):
+def insert_data_in_batches(db: Session, table, data: list, batch_size: int = 100000):
     """
     Insert data into a specified database table in batches for efficiency.
 
