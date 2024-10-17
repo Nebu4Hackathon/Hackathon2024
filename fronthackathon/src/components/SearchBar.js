@@ -5,9 +5,14 @@ const SearchBar = ({ onSearch }) => {
     const [location, setLocation] = useState('');
     const [radius, setRadius] = useState(10); // Valeur par défaut de 10 km
     const [keyword, setKeyword] = useState('');
+    const [showAdditionalLocation, setShowAdditionalLocation] = useState(false);
 
     const handleSearch = () => {
         onSearch({ type, location, radius, keyword });
+    };
+
+    const toggleAdditionalLocation = () => {
+        setShowAdditionalLocation(!showAdditionalLocation);
     };
 
     return (
@@ -33,7 +38,7 @@ const SearchBar = ({ onSearch }) => {
                     
                     {/* Interet 2  */}
                     <div className='col-md-3'>
-                    <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
+                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
                     <select 
                         id="typeSelect" 
                         className="form-control" 
@@ -49,7 +54,7 @@ const SearchBar = ({ onSearch }) => {
 
                     {/* Interet 3  */}
                     <div className='col-md-3'>
-                    <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
+                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
                     <select 
                         id="typeSelect" 
                         className="form-control" 
@@ -66,7 +71,7 @@ const SearchBar = ({ onSearch }) => {
                     {/* Interet 4  */}
                     <div className='col-md-3'>
 
-                    <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
+                    <label htmlFor="typeSelect" className="text-primary">Autre Type de Point d'Intérêt</label>
                     <select 
                         id="typeSelect" 
                         className="form-control" 
@@ -95,18 +100,23 @@ const SearchBar = ({ onSearch }) => {
                             onChange={(e) => setLocation(e.target.value)}
                         />
                     </div>
-                    {/* ville 2 */}
-                    <div className="col-md-3">
-                        <label htmlFor="locationInput" className="text-secondary">Autre localisation</label>
-                        <input 
-                            type="text" 
-                            id="locationInput" 
-                            className="form-control" 
-                            placeholder="Ville ou Adresse" 
-                            value={location} 
-                            onChange={(e) => setLocation(e.target.value)}
-                        />
-                    </div>
+                    {/* Autre localisation si showAdditionalLocation true */}
+                    {showAdditionalLocation && (
+                        <div className="col-md-3">
+                            <label htmlFor="additionalLocationInput" className="text-secondary">Autre localisation</label>
+                            <input 
+                                type="text" 
+                                id="additionalLocationInput" 
+                                className="form-control" 
+                                placeholder="Ville ou Adresse" 
+                                value={location} 
+                                onChange={(e) => setLocation(e.target.value)}
+                            />
+                        </div>
+                    )}
+                    <button className="btn btn-secondary btn-sm mt-2 col-md-3" onClick={toggleAdditionalLocation}>
+                        {showAdditionalLocation ? 'Masquer' : 'Afficher plus'}
+                    </button>
                 </div>
                 <div className="col-md-3 mt-3">
                     <label htmlFor="radiusRange" className="text-tertiary">Distance Maximale (km) : {radius} km</label>

@@ -1,4 +1,7 @@
 // import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { Icon} from "leaflet";
 
 //ajouter map indiquant localisation de l'activité
 
@@ -7,11 +10,17 @@ const DetailsPage = () => {
         name: "Randonnée au Mont Blanc",
         description: "Découvrez les magnifiques paysages du Mont Blanc lors d'une randonnée guidée. Profitez de vues imprenables sur les sommets enneigés et explorez la faune et la flore locales.",
         location: "Chamonix-Mont-Blanc, France",
+        coordinates: [45.9246705, 6.8727506],
         distance: "12 km",
         duration: "6 heures",
         difficulty: "Modérée",
         image: "https://via.placeholder.com/800x400", // Image de remplacement
     };
+
+    const customIcon = new Icon({
+        iconUrl: require("../img/icon.png"),
+        iconSize: [38,38] // size of icon
+    })
 
     return (
         <div className="container mt-5">
@@ -22,7 +31,9 @@ const DetailsPage = () => {
                     <p className="card-text">{fakeData.description}</p>
 
                     <hr />
+
                     <div className="row">
+                        
                         <div className="col-md-6">
                             <h5 className="text-secondary">Localisation :</h5>
                             <p>{fakeData.location}</p>
@@ -43,8 +54,23 @@ const DetailsPage = () => {
                             <p>{fakeData.difficulty}</p>
                         </div>
                     </div>
+                    <div className="row justify-content-center">
+                        <MapContainer 
+                            center={fakeData.coordinates} 
+                            zoom={15} 
+                        >
+                            <TileLayer 
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; 
+                                <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            />
+                                <Marker position={fakeData.coordinates} icon={customIcon}>
+                                    <Popup><p>{fakeData.name}</p></Popup>
+                                </Marker>
+                        </MapContainer>
+                    </div>
 
-                    <button className="btn btn-primary mt-4 w-100">Réserver cette activité</button>
+                    <button className="btn btn-primary mt-4 w-20">Réserver cette activité</button>
                 </div>
             </div>
         </div>

@@ -89,7 +89,7 @@ const EditPage = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-success mt-4 w-100">Enregistrer les modifications</button>
+                    <button type="submit" className="btn btn-success mt-4 w-20">Enregistrer les modifications</button>
                 </form>
             </div>
         </div>
