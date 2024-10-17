@@ -69,8 +69,6 @@ const DetailsPage = () => {
                                 </Marker>
                         </MapContainer>
                     </div>
-
-                    <button className="btn btn-primary mt-4 w-20">Réserver cette activité</button>
                 </div>
             </div>
         </div>

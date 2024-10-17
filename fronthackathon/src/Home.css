@@ -1,8 +1,11 @@
 .leaflet-container{
     height: 40vh;
-    width: 30%;
+    width: 40%;
 }
 
-/* @media screen {
-    
-} */
+@media only screen and (max-width: 768px) {
+    .leaflet-container{
+        height: 40vh;
+        width: 80%;
+    }
+}
