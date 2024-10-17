@@ -1,24 +1,33 @@
-#database.py
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
 
-from model.activityModel import metadata as activity_metadata  # Only import activity metadata
+from model.activityModel import metadata
 
-# Update the database URL to PostgreSQL
-DATABASE_URL = "postgresql://postgres:0000@localhost:5432/tourism"
+# Load environment variables from .env
+load_dotenv()
 
-# Create PostgreSQL engine
-engine = create_engine(DATABASE_URL)
+# Get the MySQL connection URL from the .env file
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+# Create a MySQL engine with connection pooling and recycle options for Laragon MySQL
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,  # Ensures SQLAlchemy checks the connection before using it
+    pool_recycle=3600,  # Recycles connections after 1 hour to prevent idle disconnection
+)
+
+# Session Local
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# Create tables if they don't exist
+# Create all tables using the metadata
 def init_db():
-    # Create all tables defined in the activity metadata
-    activity_metadata.create_all(bind=engine)
+    metadata.create_all(bind=engine)
 
 
-# Dependency to get a DB session
+# Dependency to get a database session
 def get_db():
     db = SessionLocal()
     try:

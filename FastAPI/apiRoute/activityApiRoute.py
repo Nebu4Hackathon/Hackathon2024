@@ -1,66 +1,42 @@
-# activityApiRoute.py
-from fastapi import APIRouter, Depends
-from sqlalchemy import inspect
-from sqlalchemy.orm import Session
-import csv
 import requests
+import csv
 from io import StringIO
+from sqlalchemy.orm import Session
+import logging
 
-from utils.db_utils import insert_data_in_batches
-from db.database import get_db
+from crud.activityInsert import insert_activity
 from model.activityModel import activity_table
+from utils.apiEndpoints_utils import ENDPOINTS, filter_activity_data
 
-router = APIRouter()
-
-BASE_CSV_URL = 'https://www.data.gouv.fr/fr/datasets/r/'
-
-
-async def fetch_and_save_data_from_csv(csv_url: str, db: Session):
-    # Step 1: Fetch the CSV file
-    response = requests.get(csv_url)
-    if response.status_code != 200:
-        return {"error": f"Failed to fetch the CSV file from {csv_url}"}
-
-    # Step 2: Parse the CSV data
-    csv_content = response.content.decode('utf-8')
-    csv_reader = csv.DictReader(StringIO(csv_content))
-
-    # Step 3: Get valid column names from the SQLAlchemy model
-    valid_columns = {column.name for column in inspect(activity_table).c}
-
-    data = []
-    for row in csv_reader:
-        # Split "Code_postal_et_commune" into "Code_postal" and "commune"
-        code_postal_et_commune = row.get('Code_postal_et_commune', '')
-
-        if code_postal_et_commune:
-            parts = code_postal_et_commune.split('#', 1)
-            code_postal = parts[0]
-            commune = parts[1] if len(parts) > 1 else None
-        else:
-            code_postal, commune = None, None
-
-        # Create a dictionary that only includes valid columns
-        filtered_data = {
-            key: row[key]
-            for key in valid_columns
-            if key in row
-        }
-
-        # Manually add the derived fields
-        filtered_data['Code_Postal'] = code_postal
-        filtered_data['Commune'] = commune
-
-        data.append(filtered_data)
-
-    # Step 4: Insert the data into the database
-    insert_data_in_batches(db, activity_table, data)
-
-    return {"message": f"Data from {csv_url} retrieved and saved successfully"}
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 
-# Dynamic endpoint using a path parameter for the identifier
-@router.get("/fetch-and-save-activity-data/{identifier}")
-async def fetch_and_save_activity_data(identifier: str, db: Session = Depends(get_db)):
-    csv_url = f"{BASE_CSV_URL}{identifier}"
-    return await fetch_and_save_data_from_csv(csv_url, db)
+def fetch_csv_data(url: str) -> list[dict]:
+    """Fetches CSV data from a given URL and returns it as a list of dictionaries."""
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an error for bad status
+    csv_data = StringIO(response.text)
+    reader = csv.DictReader(csv_data)
+    return list(reader)
+
+
+def process_and_insert_data(db: Session):
+    """Fetches data from multiple CSV endpoints and inserts it into the database."""
+    for identifier in ENDPOINTS:
+        csv_url = f"https://www.data.gouv.fr/fr/datasets/r/{{{identifier}}}"  # Construct the URL
+
+        try:
+            # Fetch the CSV data
+            activities = fetch_csv_data(csv_url)
+
+            # Process and filter data
+            filtered_activities = [filter_activity_data(activity_data) for activity_data in activities]
+
+            # Bulk insert into the database
+            db.execute(activity_table.insert(), filtered_activities)  # Bulk insert
+            db.commit()  # Commit after bulk insert
+            logging.info(f"Inserted {len(filtered_activities)} activities for identifier {identifier}")
+
+        except Exception as e:
+            logging.error(f"Error processing data for identifier {identifier}: {e}")
