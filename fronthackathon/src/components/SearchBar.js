@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // Fake data
 const fakeData = [
-    { id: 1, nom: 'Balade en Canoë', type: 'randonnee', location: 'Paris' },
+    { id: 1, nom: 'Balade en Canoë', type: 'canoe', location: 'Paris' },
     { id: 2, nom: 'Randonnée en montagne', type: 'randonnee', location: 'Grenoble' },
     { id: 3, nom: 'Tour à vélo', type: 'velo', location: 'Lyon' },
     { id: 4, nom: 'Canoë sur la rivière', type: 'canoe', location: 'Marseille' },
@@ -20,9 +20,17 @@ const SearchBar = () => {
     // Fonction de filtrage
     const handleSearch = () => {
         const filteredResults = fakeData.filter(item =>
-            item.nom.toLowerCase().includes(keyword.toLowerCase())  // Filtre par mot-clé dans le champ "nom"
+            item.nom.toLowerCase().includes(keyword.toLowerCase()),  // Filtre par mot-clé dans le champ "nom"
         );
+        const filteredResultsByType = fakeData.filter(item =>
+            item.type.includes(type)
+        )
+        const filteredResultsByLocation = fakeData.filter(item =>
+            item.location.toLowerCase().includes(location.toLowerCase())
+        )
         setResults(filteredResults);  // Mettre à jour les résultats filtrés
+        setResults(filteredResultsByType);
+        setResults(filteredResultsByLocation);
     };
 
     return (
@@ -30,7 +38,7 @@ const SearchBar = () => {
             <div className="form-row mb-3">
                 <div className="col">
                     {/* Champ de type d'intérêt */}
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
                         <select 
                             id="typeSelect" 
@@ -46,8 +54,8 @@ const SearchBar = () => {
                     </div>
                     
                     {/* Champ de localisation */}
-                    <div className="col-md-3 mt-3">
-                        <label htmlFor="locationInput" className="text-secondary">Localisation Exacte</label>
+                    <div className="col-md-4 mt-3">
+                        <label htmlFor="locationInput" className="text-primary">Localisation Exacte</label>
                         <input 
                             type="text" 
                             id="locationInput" 
@@ -58,7 +66,7 @@ const SearchBar = () => {
                         />
                     </div>
 
-                    <div className="col-md-3">
+                    <div className="col-md-4 mt-3">
                         <label htmlFor="radiusRange" className="text-tertiary">Distance Maximale (km) : {radius} km</label>
                         <input 
                             type="range" 
@@ -73,7 +81,7 @@ const SearchBar = () => {
                     </div>                 
 
                     {/* Champ de recherche par mot-clé */}
-                    <div className="col-md-3 mt-3">
+                    <div className="col-md-4 mt-3">
                         <label htmlFor="keywordInput" className="text-primary">Recherche par Mot-Clé</label>
                         <input 
                             type="text" 
@@ -94,11 +102,6 @@ const SearchBar = () => {
             <div className="mt-3">
             <h3>Résultats de la recherche :</h3>
             {results.length > 0 ? (
-                // <ul>
-                //     {results.map(result => (
-                //         <li key={result.id}>{result.nom} - {result.location}</li>
-                //     ))}
-                // </ul>
             <div>
                 {results.map(result => (
                 <div className="col-md-4 mb-3" key={result.id}>{result.nom} - {result.location}
