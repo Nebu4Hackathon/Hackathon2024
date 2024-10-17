@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from fastapi_utils.tasks import repeat_every
+from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import Session
 
 from apiRoute.activityApiRoute import process_and_insert_data
@@ -9,16 +9,26 @@ from db.database import get_db, init_db
 # Define FastAPI app
 app = FastAPI()
 
+# Create a scheduler
+scheduler = BackgroundScheduler()
+
 
 # Initialize the database
 @app.on_event("startup")
 def startup_event():
     init_db()
+    # Schedule the task to run once a month on the first day at midnight
+    scheduler.add_job(fetch_and_insert_data_task, 'cron', day=17, hour=21, minute=37)
+    scheduler.start()
 
 
-# Insert data periodically (adjust the interval as needed)
-@app.on_event("startup")
-@repeat_every(seconds=3600)  # Run every hour
+@app.on_event("shutdown")
+def shutdown_event():
+    """Shutdown the scheduler when the FastAPI app is shutting down."""
+    scheduler.shutdown()
+
+
+# Define the periodic task
 def fetch_and_insert_data_task():
     db: Session = next(get_db())
     process_and_insert_data(db)

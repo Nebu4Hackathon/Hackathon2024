@@ -22,33 +22,42 @@ ENDPOINTS = [
 
 
 def filter_activity_data(activity_data: dict) -> dict:
-    """Filters the activity data to only include valid columns and split postal code and commune."""
+    """Filters the activity data to only include valid columns and splits postal code and commune."""
+
+    # Define valid columns that map to the lowercase names in the database
     VALID_COLUMNS = {
-        'Nom_du_POI',
-        'Categories_de_POI',
-        'Latitude',
-        'Longitude',
-        'Adresse_postale',
-        'Code_postal',
-        'Commune',
-        'Createur_de_la_donnee',
-        'SIT_diffuseur',
-        'Date_de_mise_a_jour',
-        'Contacts_du_POI',
-        'Classements_du_POI',
-        'Description',
-        'URI_ID_du_POI',
+        'Nom_du_POI': 'nom_du_poi',
+        'Categories_de_POI': 'categories_de_poi',
+        'Latitude': 'latitude',
+        'Longitude': 'longitude',
+        'Adresse_postale': 'adresse_postale',
+        'Createur_de_la_donnee': 'createur_de_la_donnee',
+        'SIT_diffuseur': 'sit_diffuseur',
+        'Date_de_mise_a_jour': 'date_de_mise_a_jour',
+        'Contacts_du_POI': 'contacts_du_poi',
+        'Classements_du_POI': 'classements_du_poi',
+        'Description': 'description',
+        'URI_ID_du_POI': 'uri_id_du_poi',
     }
 
-    filtered_data = {key: activity_data[key] for key in VALID_COLUMNS if key in activity_data}
+    filtered_data = {}
 
-    # Split the postal code and commune
+    # Filter and map valid columns
+    for original_key, mapped_key in VALID_COLUMNS.items():
+        if original_key in activity_data:
+            filtered_data[mapped_key] = activity_data[original_key]
+
+    # Split the postal code and commune if available
     if 'Code_postal_et_commune' in activity_data:
-        code_postal, commune = activity_data['Code_postal_et_commune'].split('#', 1)
-        filtered_data['Code_postal'] = code_postal.strip()  # Strip whitespace
-        filtered_data['Commune'] = commune.strip()  # Strip whitespace
+        try:
+            code_postal, commune = activity_data['Code_postal_et_commune'].split('#', 1)
+            filtered_data['code_postal'] = code_postal.strip()  # Strip whitespace
+            filtered_data['commune'] = commune.strip()  # Strip whitespace
+        except ValueError:
+            filtered_data['code_postal'] = None
+            filtered_data['commune'] = None
     else:
-        filtered_data['Code_postal'] = None
-        filtered_data['Commune'] = None
+        filtered_data['code_postal'] = None
+        filtered_data['commune'] = None
 
     return filtered_data
