@@ -37,13 +37,6 @@ function HomePage() {
 
     return (
         <>
-            <nav className="navbar navbar-dark bg-dark mb-4">
-                <div className="container">
-                    <a className="navbar-brand" href="#">Tourisme Explorer</a>
-                    <a className="navbar-brand" href="#">Rechercher</a>
-                    <a className="navbar-brand" href="#">Carte</a>
-                </div>
-            </nav>
             <div className="container">
                 <h1 className="text-center text-primary mb-4">Recherchez des Activités Touristiques</h1>
                 <SearchBar onSearch={handleSearch} />
