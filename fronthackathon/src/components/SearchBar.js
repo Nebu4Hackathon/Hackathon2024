@@ -13,43 +13,79 @@ const SearchBar = () => {
     const [location, setLocation] = useState('');
     const [radius, setRadius] = useState(10); // Valeur par défaut de 10 km
     const [sortOrder, setSortOrder] = useState(''); // Nouvel état pour gérer le tri
+    const [suggestions, setSuggestions] = useState([]); // État pour stocker les suggestions
 
+    // Function to fetch suggestions from API
+    const fetchSuggestions = async (query) => {
+        try {
+            const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${query}&limit=5`);
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des suggestions');
+            }
+            const data = await response.json();
+            setSuggestions(data.features.map((feature) => feature.properties.label)); // Set suggestions
+        } catch (err) {
+            console.error(err);
+            setError('Erreur lors de la récupération des suggestions');
+        }
+    };
 
-    // useEffect(() => {
-    //     const locationInput = document.querySelector('#locationInput');
+        // Handle input change for location with auto-completion
+        const handleLocationChange = (e) => {
+            const inputValue = e.target.value;
+            setLocation(inputValue);
+    
+            if (inputValue.length > 2) { // Start searching after 3 characters
+                fetchSuggestions(inputValue);
+            } else {
+                setSuggestions([]); // Clear suggestions if input is too short
+            }
+        };
 
-    //     const placesAutocomplete = places({
-    //         appId: 'G0TCD82RYZ',      // Remplacez par votre appId
-    //         apiKey: '2a56f347f12e2d1fd2c36f509d7d2c39',    // Remplacez par votre Search API Key
-    //         container: locationInput,
-    //         countries: ['fr'],  // Limite les résultats à la France
-    //         type: 'address',     // Recherche d'adresses et de villes
-    //         language: 'fr',      // Utilise la langue française pour les suggestions
-    //     });
-
-    //     placesAutocomplete.on('change', (e) => {
-    //         setLocation(e.suggestion.value);
-    //     });
-
-    //     return () => {
-    //         placesAutocomplete.destroy();  // Nettoyer l'instance d'Algolia Places lors du démontage
-    //     };
-    // }, []);
     // Fonction de recherche par mot-clé
     const handleSearch = async () => {
-        // if (!type) {
-        //     setError('Veuillez sélectionner un type de point d\'intérêt');
-        //     return;
-        // }
 
         try {
             const response = await fetch(`http://localhost:8080/api/activity/type/${type}`);
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération des données');
             }
-            const data = await response.json(); // Convertir la réponse en JSON
-            setResults(data); // Mettre à jour les résultats avec les données de l'API
-            setError(null); // Réinitialiser les erreurs
+            const data = await response.json();
+            setResults(data);
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError('Erreur lors de la récupération des activités');
+        }
+        // if (!type) {
+        //     setError('Veuillez sélectionner un type de point d\'intérêt');
+        //     return;
+        // }
+
+        try {
+            // Define the query parameters
+            const longitude = 12.34; // Replace with the actual longitude value
+            const latitude = 56.78;  // Replace with the actual latitude value
+            const distance = 10.0;   // Replace with the actual distance value or let it default
+            const page = 0;          // Replace with the desired page number or let it default
+            const size = 10;         // Replace with the desired page size or let it default
+        
+            // Construct the URL with query parameters
+            const response = await fetch(`http://localhost:8080/api/activity/location?longitude=${longitude}&latitude=${latitude}&distance=${distance}&page=${page}&size=${size}`);
+        
+            // Check if the response is okay
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+            }
+        
+            // Parse the JSON response
+            const data = await response.json();
+        
+            // Update results with the data from the API
+            setResults(data);
+        
+            // Reset any errors
+            setError(null);
         } catch (err) {
             console.error(err);
             setError('Erreur lors de la récupération des activités');
@@ -74,6 +110,12 @@ const SearchBar = () => {
         }
     };
 
+        // Function to handle suggestion click
+        const handleSuggestionClick = (suggestion) => {
+            setLocation(suggestion); // Set the selected suggestion in the input field
+            setSuggestions([]); // Clear suggestions after selection
+        };
+
     // Fonction de tri
     const handleSort = (criteria) => {
         const sortedResults = [...results].sort((a, b) => {
@@ -94,24 +136,25 @@ const SearchBar = () => {
                 <div className="col">
                     <div className="row">
                          {/* Champ de type d'intérêt */}
-                    <div className="col-md-3">
-                        <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
-                        <select 
-                            id="typeSelect" 
-                            className="form-control" 
-                            value={type} 
-                            onChange={(e) => setType(e.target.value)}
-                        >
-                            <option value="">Choisir...</option>
-                            <option value="randonnee">Randonnée</option>
-                            <option value="velo">Vélo</option>
-                            <option value="autre">Autre</option>
-                        </select>
+                        <div className="col-md-3">
+                            <label htmlFor="typeSelect" className="text-primary">Type de Point d'Intérêt</label>
+                            <select 
+                                id="typeSelect" 
+                                className="form-control" 
+                                value={type} 
+                                onChange={(e) => setType(e.target.value)}
+                            >
+                                <option value="">Choisir...</option>
+                                <option value="randonnee">Randonnée</option>
+                                <option value="velo">Vélo</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div className="row">
                     {/* Champ de localisation */}
-                    <div className="col-md-3 mt-3">
+                    {/* <div className="col-md-3 mt-3">
                         <label htmlFor="locationInput" className="text-secondary">Localisation Exacte</label>
                         <input 
                             type="text" 
@@ -121,8 +164,38 @@ const SearchBar = () => {
                             value={location} 
                             onChange={(e) => setLocation(e.target.value)}
                         />
-                    </div>
-              
+                    </div> */}
+                <div className="col-md-3 mt-3">
+                <label htmlFor="locationInput" className="text-secondary">Localisation Exacte</label>
+                <input
+                    type="text"
+                    id="locationInput"
+                    className="form-control"
+                    placeholder="Ville ou Adresse"
+                    value={location}
+                    onChange={handleLocationChange} // Auto-complete as user types
+                />
+                {/* Display suggestions */}
+                {suggestions.length > 0 && (
+                    <ul className="list-group position-absolute w-100" style={{ zIndex: 1000 }}>
+                        {suggestions.map((suggestion, index) => (
+                            <li
+                                key={index}
+                                className="list-group-item"
+                                onClick={() => handleSuggestionClick(suggestion)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {suggestion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+            {/* Display error if any */}
+            {error && <p className="text-danger">{error}</p>}
+        </div>
+                <div>
                     </div>
                     <div className="col-md-3">
                         <label htmlFor="radiusRange" className="text-tertiary">Distance Maximale (km) : {radius} km</label>
