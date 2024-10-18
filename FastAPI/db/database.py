@@ -52,4 +52,3 @@ def get_db():
     finally:
         # Fermer la session après utilisation
         db.close()
-/

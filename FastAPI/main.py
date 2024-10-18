@@ -2,8 +2,8 @@ from fastapi import FastAPI, Depends
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import Session
 
-from apiRoute.activityApiRoute import process_and_insert_data
-from crud.activityInsert import get_all_activities
+from apiRoute.activity_api_route import process_and_insert_data
+from crud.activity_insert import get_all_activities
 from db.database import get_db, init_db
 
 # Définition de l'application FastAPI
@@ -58,4 +58,3 @@ def get_activities(db: Session = Depends(get_db)):
     """
     activities = get_all_activities(db)  # Récupère toutes les activités depuis la base
     return activities  # Renvoie les activités sous forme de réponse JSON
-/
