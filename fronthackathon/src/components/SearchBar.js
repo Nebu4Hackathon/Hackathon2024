@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
+=======
+import React, { useState, useEffect  } from 'react';
+>>>>>>> Stashed changes
 import { Link } from 'react-router-dom';
 
 // Fake data
@@ -11,6 +15,7 @@ const fakeData = [
 ];
 
 const SearchBar = () => {
+<<<<<<< Updated upstream
     const [type, setType] = useState('');
     const [location, setLocation] = useState('');
     const [radius, setRadius] = useState(10); // Valeur par défaut de 10 km
@@ -19,20 +24,124 @@ const SearchBar = () => {
 
     // Fonction de filtrage
     const handleSearch = () => {
+=======
+
+    const fakeData = [
+        { id: 1, nom: 'Balade en Canoë', type: 'canoe', location: 'Paris' },
+        { id: 2, nom: 'Randonnée en montagne', type: 'randonnee', location: 'Grenoble' },
+        { id: 3, nom: 'Tour à vélo', type: 'velo', location: 'Lyon' },
+        { id: 4, nom: 'Canoë sur la rivière', type: 'canoe', location: 'Marseille' },
+        { id: 5, nom: 'Vélo autour du lac', type: 'velo', location: 'Annecy' }
+    ];
+
+    const [keyword, setKeyword] = useState(''); // Mot-clé pour la recherche
+    const [results, setResults] = useState([]); // Pour stocker les résultats de l'API
+    const [error, setError] = useState(null); // Pour stocker les erreurs
+    const [type, setType] = useState('');
+    const [location, setLocation] = useState('');
+    const [radius, setRadius] = useState(10); // Valeur par défaut de 10 km
+    const [sortOrder, setSortOrder] = useState(''); // Nouvel état pour gérer le tri
+
+
+    // useEffect(() => {
+    //     const locationInput = document.querySelector('#locationInput');
+
+    //     const placesAutocomplete = places({
+    //         appId: 'G0TCD82RYZ',      // Remplacez par votre appId
+    //         apiKey: '2a56f347f12e2d1fd2c36f509d7d2c39',    // Remplacez par votre Search API Key
+    //         container: locationInput,
+    //         countries: ['fr'],  // Limite les résultats à la France
+    //         type: 'address',     // Recherche d'adresses et de villes
+    //         language: 'fr',      // Utilise la langue française pour les suggestions
+    //     });
+
+    //     placesAutocomplete.on('change', (e) => {
+    //         setLocation(e.suggestion.value);
+    //     });
+
+    //     return () => {
+    //         placesAutocomplete.destroy();  // Nettoyer l'instance d'Algolia Places lors du démontage
+    //     };
+    // }, []);
+    // Fonction de recherche par mot-clé
+    // const handleSearch = async () => {
+    //     // if (!type) {
+    //     //     setError('Veuillez sélectionner un type de point d\'intérêt');
+    //     //     return;
+    //     // }
+
+    //     try {
+    //         const response = await fetch(`http://localhost:8080/api/activity/type/${type}`);
+    //         if (!response.ok) {
+    //             throw new Error('Erreur lors de la récupération des données');
+    //         }
+    //         const data = await response.json(); // Convertir la réponse en JSON
+    //         setResults(data); // Mettre à jour les résultats avec les données de l'API
+    //         setError(null); // Réinitialiser les erreurs
+    //     } catch (err) {
+    //         console.error(err);
+    //         setError('Erreur lors de la récupération des activités');
+    //     }
+    
+    //     // if (!keyword) {
+    //     //     setError('Veuillez entrer un mot-clé');
+    //     //     return;
+    //     // }
+
+    //     try {
+    //         const response = await fetch(`http://localhost:8080/api/activity/full-text/${keyword}`);
+    //         if (!response.ok) {
+    //             throw new Error('Erreur lors de la récupération des données');
+    //         }
+    //         const data = await response.json(); // Convertir la réponse en JSON
+    //         setResults(data); // Mettre à jour les résultats avec les données de l'API
+    //         setError(null); // Réinitialiser les erreurs
+    //     } catch (err) {
+    //         console.error(err);
+    //         setError('Erreur lors de la récupération des activités');
+    //     }
+    // };
+
+        const handleSearch = () => {
+>>>>>>> Stashed changes
         const filteredResults = fakeData.filter(item =>
             item.nom.toLowerCase().includes(keyword.toLowerCase()),  // Filtre par mot-clé dans le champ "nom"
         );
         const filteredResultsByType = fakeData.filter(item =>
             item.type.includes(type)
+<<<<<<< Updated upstream
         )
         const filteredResultsByLocation = fakeData.filter(item =>
             item.location.toLowerCase().includes(location.toLowerCase())
         )
+=======
+        );
+        const filteredResultsByLocation = fakeData.filter(item =>
+            item.location.toLowerCase().includes(location.toLowerCase())
+        );
+>>>>>>> Stashed changes
         setResults(filteredResults);  // Mettre à jour les résultats filtrés
         setResults(filteredResultsByType);
         setResults(filteredResultsByLocation);
     };
 
+<<<<<<< Updated upstream
+=======
+    // Fonction de tri
+    const handleSort = (criteria) => {
+        const sortedResults = [...results].sort((a, b) => {
+            if (criteria === 'nom') {
+                return a.nom.localeCompare(b.nom);
+            } else if (criteria === 'location') {
+                return a.location.localeCompare(b.location);
+            }
+            return 0;
+        });
+        setResults(sortedResults);
+        setSortOrder(criteria); // Mémoriser l'ordre de tri
+    };
+
+>>>>>>> Stashed changes
     return (
         <div className="p-3 bg-light rounded">
             <div className="form-row mb-3">
@@ -94,6 +203,7 @@ const SearchBar = () => {
                     </div>
                 </div>
 
+<<<<<<< Updated upstream
                 {/* Bouton de recherche */}
                 <button className="btn btn-primary w-15 mt-3" onClick={handleSearch}>Rechercher</button>
             </div>
@@ -127,6 +237,50 @@ const SearchBar = () => {
             ) : (
                 <p></p>
             )}
+=======
+                 {/* Bouton de recherche */}
+                 <button className="btn btn-primary w-15 mt-3" onClick={handleSearch}>Rechercher</button>
+                 
+             </div>
+
+            {/* Affichage des résultats et bouton de tri */}
+            <div className="mt-3">
+                {results.length > 0 && (
+                    <>
+                        <div className="d-flex justify-content-end mb-3">
+                            <button className="btn btn-info me-2" onClick={() => handleSort('nom')}>
+                                Trier par Nom
+                            </button>
+                            <button className="btn btn-info" onClick={() => handleSort('location')}>
+                                Trier par Localisation
+                            </button>
+                        </div>
+
+                        <div className='row'>
+                            {results.map(result => (
+                                <div className="col-md-4 my-4" key={result.id}>
+                                    {result.nom} - {result.location}
+                                    <div className="card text-white h-100" style={{ backgroundImage: result.image }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title text-primary">{result.nom}</h5>
+                                            <p className='card-text text-primary'>
+                                                {result.description}
+                                            </p>
+                                            <div className="d-flex justify-content-end mt-5">
+                                                <Link to="/details">
+                                                    <button className="btn btn-primary">
+                                                        Voir les détails
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+>>>>>>> Stashed changes
             </div>
         </div>
     );
