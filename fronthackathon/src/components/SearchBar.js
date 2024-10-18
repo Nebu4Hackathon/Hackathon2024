@@ -108,52 +108,6 @@ const SearchBar = () => {
                             <option value="autre">Autre</option>
                         </select>
                     </div>
-                          {/* Champ de type d'intérêt */}
-                          <div className="col-md-3">
-                        <label htmlFor="typeSelect" className="text-primary">2éme Type de Point d'Intérêt</label>
-                        <select 
-                            id="typeSelect" 
-                            className="form-control" 
-                            value={type} 
-                            onChange={(e) => setType(e.target.value)}
-                        >
-                            <option value="">Choisir...</option>
-                            <option value="randonnee">Randonnée</option>
-                            <option value="velo">Vélo</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                          {/* Champ de type d'intérêt */}
-                          <div className="col-md-3">
-                        <label htmlFor="typeSelect" className="text-primary">3éme Type de Point d'Intérêt</label>
-                        <select 
-                            id="typeSelect" 
-                            className="form-control" 
-                            value={type} 
-                            onChange={(e) => setType(e.target.value)}
-                        >
-                            <option value="">Choisir...</option>
-                            <option value="randonnee">Randonnée</option>
-                            <option value="velo">Vélo</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                          {/* Champ de type d'intérêt */}
-                          <div className="col-md-3">
-                        <label htmlFor="typeSelect" className="text-primary">4éme Type de Point d'Intérêt</label>
-                        <select 
-                            id="typeSelect" 
-                            className="form-control" 
-                            value={type} 
-                            onChange={(e) => setType(e.target.value)}
-                        >
-                            <option value="">Choisir...</option>
-                            <option value="randonnee">Randonnée</option>
-                            <option value="velo">Vélo</option>
-                            <option value="autre">Autre</option>
-                        </select>
-                    </div>
-                    </div>
                     
                     <div className="row">
                     {/* Champ de localisation */}
