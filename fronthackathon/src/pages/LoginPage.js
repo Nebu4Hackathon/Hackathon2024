@@ -1,107 +1,122 @@
 import React, { useState } from 'react';
 
 const LoginPage = () => {
-  const [loginData, setLoginData] = useState({ username: '', email: '', password: '' });
-  const [registerData, setRegisterData] = useState({ username: '', email: '', password: '' });
-  const [loginError, setLoginError] = useState(''); // State to handle login errors
-  const [registerError, setRegisterError] = useState(''); // State to handle registration errors
+  // États pour le formulaire de connexion
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState(null);
 
-  const handleLoginChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  };
+  // États pour le formulaire d'enregistrement
+  const [registerUsername, setRegisterUsername] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [registerError, setRegisterError] = useState(null);
 
-  const handleRegisterChange = (e) => {
-    setRegisterData({ ...registerData, [e.target.name]: e.target.value });
-  };
-
+  // Fonction de gestion du formulaire de connexion
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData),
-        credentials: 'include', // important to include session cookies
-      });
-      if (response.ok) {
-        window.location.href = '/dashboard'; // Navigate to dashboard
-      } else {
-        const errorData = await response.json();
-        setLoginError(errorData.error || 'Login failed'); // Set the error message
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      setLoginError('An unexpected error occurred during login'); // Set the error message
-    }
- };
 
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: loginUsername,
+          password: loginPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la connexion');
+      }
+
+      const data = await response.json();
+      console.log('Connexion réussie:', data);
+
+      // Stocker le token ou effectuer une redirection si nécessaire
+      localStorage.setItem('accessToken', data.accessToken);
+      alert('Connexion réussie');
+      localStorage.setItem('accessToken', data.accessToken);
+      setLoginError(null); // Réinitialiser les erreurs
+
+    } catch (error) {
+      console.error('Erreur:', error);
+      setLoginError('Nom d\'utilisateur ou mot de passe incorrect');
+    }
+  };
+
+  // Fonction de gestion du formulaire d'enregistrement
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch('http://localhost:5000/api/register', {
+      const response = await fetch('http://localhost:8080/api/auth/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registerData),
-        credentials: 'include', // important to include session cookies
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: registerUsername,
+          email: registerEmail,
+          password: registerPassword,
+        }),
       });
-      if (response.ok) {
-        window.location.href = '/dashboard'; // Navigate to dashboard
-      } else {
-        const errorData = await response.json();
-        setRegisterError(errorData.error || 'Registration failed'); // Set the error message
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'enregistrement');
       }
+
+      const data = await response.json();
+      console.log('Enregistrement réussi:', data);
+
+      alert('Enregistrement réussi');
+      setRegisterError(null); // Réinitialiser les erreurs
+
     } catch (error) {
-      console.error('Error during registration:', error);
-      setRegisterError('An unexpected error occurred during registration'); // Set the error message
+      console.error('Erreur:', error);
+      setRegisterError('Erreur lors de l\'enregistrement. Veuillez réessayer.');
     }
   };
 
   return (
     <main className="container mt-5">
       <div className="row justify-content-center">
+        {/* Login Form */}
         <div className="col-md-5">
-          {/* Login Form */}
           <form id="loginForm" onSubmit={handleLoginSubmit} className="p-4 border rounded shadow">
-            <h2 className="text-center mb-4">Se connecter</h2>
-            {loginError && <p className="text-danger">{loginError}</p>} {/* Display login error */}
+            <h2 className="text-center mb-4">Login</h2>
+            
+            {loginError && <p className="text-danger">{loginError}</p>} {/* Affichage des erreurs de connexion */}
+
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">Identifiant</label>
+              <label htmlFor="loginUsername" className="form-label">Username</label>
               <input
                 required
                 type="text"
                 name="username"
-                value=""
-                onChange=""
+                id="loginUsername"
+                value={loginUsername}
                 className="form-control"
                 placeholder="Entrer votre identifiant"
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
-              <input
-                required
-                type="email"
-                name="email"
-                value=""
-                onChange=""
-                className="form-control"
-                placeholder="Entrer votre adresse mail"
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">Mot de passe</label>
+              <label htmlFor="loginPassword" className="form-label">Password</label>
               <input
                 required
                 type="password"
                 name="password"
-                value=""
-                onChange=""
+                id="loginPassword"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
                 className="form-control"
-                placeholder="Entrer votre mot de passe"
+                placeholder="Enter your password"
               />
             </div>
             <div>
-              <input type="submit" value="Connexion" className="btn btn-primary w-100" />
+              <input type="submit" value="Login" className="btn btn-primary w-100" />
             </div>
           </form>
         </div>
@@ -110,49 +125,54 @@ const LoginPage = () => {
           <span>OU</span>
         </div>
 
+        {/* Register Form */}
         <div className="col-md-5">
-          {/* Register Form */}
           <form id="registerForm" onSubmit={handleRegisterSubmit} className="p-4 border rounded shadow">
-            <h2 className="text-center mb-4">S'inscrire</h2>
-            {registerError && <p className="text-danger">{registerError}</p>} {/* Display registration error */}
+            <h2 className="text-center mb-4">Register</h2>
+            
+            {registerError && <p className="text-danger">{registerError}</p>} {/* Affichage des erreurs d'enregistrement */}
+
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">Identifiant</label>
+              <label htmlFor="registerUsername" className="form-label">Username</label>
               <input
                 required
                 type="text"
                 name="username"
-                value=""
-                onChange=""
+                id="registerUsername"
+                value={registerUsername}
+                onChange={(e) => setRegisterUsername(e.target.value)}
                 className="form-control"
-                placeholder="Entrer votre identifiant"
+                placeholder="Enter your username"
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="registerEmail" className="form-label">Email</label>
               <input
                 required
                 type="email"
                 name="email"
-                value=""
-                onChange=""
+                id="registerEmail"
+                value={registerEmail}
+                onChange={(e) => setRegisterEmail(e.target.value)}
                 className="form-control"
-                placeholder="Entrer votre adresse mail"
+                placeholder="Enter your email"
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">Mot de passe</label>
+              <label htmlFor="registerPassword" className="form-label">Password</label>
               <input
                 required
                 type="password"
                 name="password"
-                value=""
-                onChange=""
+                id="registerPassword"
+                value={registerPassword}
+                onChange={(e) => setRegisterPassword(e.target.value)}
                 className="form-control"
-                placeholder="Entrer votre mot de passe"
+                placeholder="Enter your password"
               />
             </div>
             <div>
-              <input type="submit" value="Inscription" className="btn btn-primary w-100" />
+              <input type="submit" value="Register" className="btn btn-primary w-100" />
             </div>
           </form>
         </div>

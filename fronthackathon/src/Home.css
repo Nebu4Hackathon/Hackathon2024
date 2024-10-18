@@ -9,3 +9,24 @@
         width: 80%;
     }
 }
+/* Style de base */
+.nav-img {
+    transition: all 0.3s ease;
+  }
+
+  /* Hover pour chaque image */
+  .nav-link.home:hover img {
+    content: url('../src/img/plus2.jpg'); /* Image affichée au survol pour Home */
+  }
+
+  .nav-link.search:hover img {
+    content: url('../src/img/ville2.jpg'); /* Image affichée au survol pour Rechercher */
+  }
+
+  .nav-link.map:hover img {
+    content: url('../src/img/map2.jpg'); /* Image affichée au survol pour Carte */
+  }
+
+  .nav-link.connexion:hover img {
+    content: url('../src/img/co2.jpg'); /* Image affichée au survol pour Connexion */
+  }
