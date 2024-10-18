@@ -63,17 +63,11 @@ const LoginPage = () => {
           {/* Login Form */}
           <form id="loginForm" onSubmit={handleLoginSubmit} className="p-4 border rounded shadow">
             <h2 className="text-center mb-4">Se connecter</h2>
-<<<<<<< Updated upstream
-            {loginError && <p className="text-danger">{loginError}</p>} {/* Display login error */}
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">Identifiant</label>
-=======
             
             {loginError && <p className="text-danger">{loginError}</p>} {/* Affichage des erreurs de connexion */}
 
             <div className="mb-3">
               <label htmlFor="loginUsername" className="form-label">Identifiant</label>
->>>>>>> Stashed changes
               <input
                 required
                 type="text"
@@ -85,23 +79,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="mb-3">
-<<<<<<< Updated upstream
-              <label htmlFor="email" className="form-label">Email</label>
-              <input
-                required
-                type="email"
-                name="email"
-                value=""
-                onChange=""
-                className="form-control"
-                placeholder="Entrer votre adresse mail"
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">Mot de passe</label>
-=======
               <label htmlFor="loginPassword" className="form-label">Mot de passe</label>
->>>>>>> Stashed changes
               <input
                 required
                 type="password"
@@ -126,17 +104,11 @@ const LoginPage = () => {
           {/* Register Form */}
           <form id="registerForm" onSubmit={handleRegisterSubmit} className="p-4 border rounded shadow">
             <h2 className="text-center mb-4">S'inscrire</h2>
-<<<<<<< Updated upstream
-            {registerError && <p className="text-danger">{registerError}</p>} {/* Display registration error */}
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">Identifiant</label>
-=======
             
             {registerError && <p className="text-danger">{registerError}</p>} {/* Affichage des erreurs d'enregistrement */}
 
             <div className="mb-3">
               <label htmlFor="registerUsername" className="form-label">Identifiant</label>
->>>>>>> Stashed changes
               <input
                 required
                 type="text"
@@ -148,11 +120,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="mb-3">
-<<<<<<< Updated upstream
-              <label htmlFor="email" className="form-label">Email</label>
-=======
               <label htmlFor="registerEmail" className="form-label">Adresse Mail</label>
->>>>>>> Stashed changes
               <input
                 required
                 type="email"
@@ -164,11 +132,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="mb-3">
-<<<<<<< Updated upstream
-              <label htmlFor="password" className="form-label">Mot de passe</label>
-=======
               <label htmlFor="registerPassword" className="form-label">Mot de passe</label>
->>>>>>> Stashed changes
               <input
                 required
                 type="password"

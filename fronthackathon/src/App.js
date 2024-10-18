@@ -4,21 +4,24 @@ import { BrowserRouter } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import DetailsPage from './pages/DetailsPage';
 import EditPage from './pages/EditPage';
+import Header from './components/Header'; 
 import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
     <BrowserRouter basename="/app">
+      <Header />
       <Routes>
         {/* Route pour la page d'accueil */}
         <Route path="/" element={<HomePage />} />
 
         {/* Route pour la page de détails */}
-        <Route path="/details" element={<DetailsPage />} />
+        <Route path="/connect" element={<LoginPage />} />
+
+        <Route path="/map" element={<DetailsPage />} />
 
         {/* Route pour la page d'édition */}
-        <Route path="/edit/:id" element={<EditPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="contact" element={<EditPage />} />
       </Routes>
     </BrowserRouter>
   );
