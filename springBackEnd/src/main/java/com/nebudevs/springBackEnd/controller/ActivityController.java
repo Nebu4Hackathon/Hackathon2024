@@ -2,6 +2,7 @@ package com.nebudevs.springBackEnd.controller;
 
 import com.nebudevs.springBackEnd.dto.ActivityDto;
 import com.nebudevs.springBackEnd.dto.DistanceActivityDto;
+import com.nebudevs.springBackEnd.model.Activity;
 import com.nebudevs.springBackEnd.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,4 +53,12 @@ public class ActivityController {
         return ResponseEntity.ok(activities);
 
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addActivity(@RequestBody Activity activity){
+        Activity acitivity =  activityService.addActivity(activity);
+        return activity != null ? ResponseEntity.ok("Activité ajoutée avec succès") : null;
+    }
+
+
 }

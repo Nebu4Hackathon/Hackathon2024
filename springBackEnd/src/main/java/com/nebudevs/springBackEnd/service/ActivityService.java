@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Streamable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,4 +48,11 @@ public class ActivityService {
         Page<Activity> activities = activityRespoistory.findActivitiesByLocationHaversine(latitude,longitude,distance, PageRequest.of(page, size));
         return activities.map(activity -> new DistanceActivityDto(activity,latitude,longitude));
     }
+
+    public Activity addActivity(Activity activity) {
+        Activity result = activityRespoistory.save(activity);
+        return  result;
+    }
+
+
 }
