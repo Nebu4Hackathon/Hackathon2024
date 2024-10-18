@@ -20,6 +20,7 @@ public class Activity {
 
     private String adressePostale;
 
+    @Column(name = "codePostal")
     private String codePostale;
 
     private String commune;
