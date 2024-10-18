@@ -1,32 +1,32 @@
 .leaflet-container{
-    height: 40vh;
-    width: 40%;
+  height: 50vh;
+  width: 100%;
 }
 
 @media only screen and (max-width: 768px) {
-    .leaflet-container{
-        height: 40vh;
-        width: 80%;
-    }
+  .leaflet-container{
+      height: 40vh;
+      width: 80%;
+  }
 }
 /* Style de base */
 .nav-img {
-    transition: all 0.3s ease;
-  }
+  transition: all 0.3s ease;
+}
 
-  /* Hover pour chaque image */
-  .nav-link.home:hover img {
-    content: url('../src/img/plus2.jpg'); /* Image affichée au survol pour Home */
-  }
+/* Hover pour chaque image */
+.nav-link.home:hover img {
+  content: url('../src/img/plus2.jpg'); /* Image affichée au survol pour Home */
+}
 
-  .nav-link.search:hover img {
-    content: url('../src/img/ville2.jpg'); /* Image affichée au survol pour Rechercher */
-  }
+.nav-link.search:hover img {
+  content: url('../src/img/ville2.jpg'); /* Image affichée au survol pour Rechercher */
+}
 
-  .nav-link.map:hover img {
-    content: url('../src/img/map2.jpg'); /* Image affichée au survol pour Carte */
-  }
+.nav-link.map:hover img {
+  content: url('../src/img/map2.jpg'); /* Image affichée au survol pour Carte */
+}
 
-  .nav-link.connexion:hover img {
-    content: url('../src/img/co2.jpg'); /* Image affichée au survol pour Connexion */
-  }
+.nav-link.connexion:hover img {
+  content: url('../src/img/co2.jpg'); /* Image affichée au survol pour Connexion */
+}

@@ -31,43 +31,46 @@ const DetailsPage = () => {
                     <p className="card-text">{fakeData.description}</p>
 
                     <hr />
-
-                    <div className="row">
-                        
-                        <div className="col-md-6">
-                            <h5 className="text-secondary">Localisation :</h5>
-                            <p>{fakeData.location}</p>
-                        </div>
-                        <div className="col-md-3">
-                            <h5 className="text-secondary">Distance :</h5>
-                            <p>{fakeData.distance}</p>
-                        </div>
-                        <div className="col-md-3">
-                            <h5 className="text-secondary">Durée :</h5>
-                            <p>{fakeData.duration}</p>
-                        </div>
-                    </div>
-
-                    <div className="row mt-3">
-                        <div className="col-md-6">
-                            <h5 className="text-secondary">Difficulté :</h5>
-                            <p>{fakeData.difficulty}</p>
-                        </div>
-                    </div>
                     <div className="row justify-content-center">
-                        <MapContainer 
-                            center={fakeData.coordinates} 
-                            zoom={15} 
-                        >
-                            <TileLayer 
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                attribution='&copy; 
-                                <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            />
-                                <Marker position={fakeData.coordinates} icon={customIcon}>
-                                    <Popup><p>{fakeData.name}</p></Popup>
-                                </Marker>
-                        </MapContainer>
+                        <div className="col-md-5">
+                            <div className="col-md">
+                                
+                                <div className="col-md-6">
+                                    <h5 className="text-secondary">Localisation :</h5>
+                                    <p>{fakeData.location}</p>
+                                </div>
+                                <div className="col-md-3">
+                                    <h5 className="text-secondary">Distance :</h5>
+                                    <p>{fakeData.distance}</p>
+                                </div>
+                                <div className="col-md-3">
+                                    <h5 className="text-secondary">Durée :</h5>
+                                    <p>{fakeData.duration}</p>
+                                </div>
+                            </div>
+
+                            <div className="row mt-3">
+                                <div className="col-md-6">
+                                    <h5 className="text-secondary">Difficulté :</h5>
+                                    <p>{fakeData.difficulty}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-5 row justify-content-center">
+                            <MapContainer 
+                                center={fakeData.coordinates} 
+                                zoom={15} 
+                            >
+                                <TileLayer 
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; 
+                                    <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                />
+                                    <Marker position={fakeData.coordinates} icon={customIcon}>
+                                        <Popup><p>{fakeData.name}</p></Popup>
+                                    </Marker>
+                            </MapContainer>
+                        </div>
                     </div>
                 </div>
             </div>
